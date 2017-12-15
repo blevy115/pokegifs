@@ -12,7 +12,7 @@ class PokemonController < ApplicationController
 
     res = HTTParty.get("https://api.giphy.com/v1/gifs/search?api_key=#{ENV["PokeGif_Key"]}&q=#{name}&rating=g")
     body = JSON.parse(res.body)
-    gif_url = body["data"][0]["url"]
+    gif_url = body["data"][rand(0..body["data"].length-1)]["url"]
 
     respond_to do |format|
       format.json {render json: {
@@ -22,6 +22,7 @@ class PokemonController < ApplicationController
         gif: gif_url,
         }
       }
+      format.html {redirect_to gif_url}
     end
   end
 
