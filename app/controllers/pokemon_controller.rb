@@ -10,11 +10,16 @@ class PokemonController < ApplicationController
     body["types"].each { |type| types << type["type"]["name"] }
     # types = body["types"]
 
+    res = HTTParty.get("https://api.giphy.com/v1/gifs/search?api_key=#{ENV["PokeGif_Key"]}&q=#{name}&rating=g")
+    body = JSON.parse(res.body)
+    gif_url = body["data"][0]["url"]
+
     respond_to do |format|
       format.json {render json: {
         id: id,
         name: name,
-        types: types
+        types: types,
+        gif: gif_url,
         }
       }
     end
